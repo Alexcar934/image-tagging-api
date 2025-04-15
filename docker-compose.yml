@@ -1,0 +1,35 @@
+services:
+  app:
+    container_name: app-flask
+    build: ./app
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: pc3_Database
+      MYSQL_USER: pc3
+      MYSQL_PASSWORD: pc3-mbit
+    volumes:
+      - pc3_images:/app/images
+      - ./app/credentials.json:/app/credentials.json
+    restart: always
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pc3
+      MYSQL_DATABASE: pc3_Database
+      MYSQL_USER: pc3
+      MYSQL_PASSWORD: pc3-mbit
+    volumes:
+      - pc3:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+
+volumes:
+  pc3:
+  pc3_images:
