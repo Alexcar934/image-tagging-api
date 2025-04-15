@@ -96,11 +96,11 @@ def process_image(base64_str, min_conf=80):
     size_kb = round(os.path.getsize(local_path) / 1024, 2)
 
     return {
-        "id": image_id,
+        "tags": filtered_tags,
         "size": size_kb,
         "date": now,
-        "tags": filtered_tags,
-        "data": base64_str  # usamos el string original, no los bytes
+        "data": base64_str,
+        "id": image_id,  # usamos el string original, no los bytes
     }
 
 def get_image_by_id(image_id):

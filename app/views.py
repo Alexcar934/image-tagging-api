@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from controller import process_image, get_image_by_id, get_filtered_images
+from controller import process_image, get_image_by_id
 
 bp = Blueprint("api", __name__)  # Creamos un blueprint para agrupar rutas
 
