@@ -39,7 +39,7 @@ def process_image(base64_str, min_conf=80):
     image_id = str(uuid.uuid4())
     filename = f"{image_id}.jpg"
 
-    # 1. Subir a ImageKit
+    # 1. Subimos a ImageKit
     upload_info = imagekit.upload(
         file=base64_data,
         file_name=filename
@@ -68,15 +68,14 @@ def process_image(base64_str, min_conf=80):
         if t["confidence"] >= min_conf
     ]
 
-    # 3. Borrar la imagen de ImageKit
+    # 3. Borramos imagen de ImageKit
     imagekit.delete_file(file_id=file_id_ik)
 
-    # 4. Guardar localmente
+    # 4. Guardar en local
     os.makedirs(IMAGES_DIR, exist_ok=True)
     local_path = os.path.join(IMAGES_DIR, filename)
     with open(local_path, "wb") as f:
         f.write(base64.b64decode(base64_data))
-
     # 5. Guardar en base de datos
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     db = get_db()
@@ -92,6 +91,8 @@ def process_image(base64_str, min_conf=80):
         )
     db.commit()
 
+
+
     # 6. Respuesta
     size_kb = round(os.path.getsize(local_path) / 1024, 2)
 
@@ -100,7 +101,7 @@ def process_image(base64_str, min_conf=80):
         "size": size_kb,
         "date": now,
         "data": base64_str,
-        "id": image_id,  # usamos el string original, no los bytes
+        "id": image_id,  # usamos el string original, aunque es un chorro gigante, por esoo al final :)
     }
 
 def get_image_by_id(image_id):
@@ -113,7 +114,7 @@ def get_image_by_id(image_id):
     if not pic:
         raise Exception("Imagen no encontrada")
 
-    # Buscar tags asociadas
+    # Buscamos tags asociadas
     cursor.execute("SELECT tag, confidence FROM tags WHERE picture_id = %s", (image_id,))
     tags = cursor.fetchall()
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from controller import process_image, get_image_by_id
 
-bp = Blueprint("api", __name__)  # Creamos un blueprint para agrupar rutas
+bp = Blueprint("api", __name__) 
 
 @bp.route("/")
 def index():
@@ -28,11 +28,11 @@ def upload_image():
     if not body or "data" not in body:
         return jsonify({"error": "Missing 'data' in body"}), 400
 
-    # Valor por defecto 80 si no se pasa ?min_confidence=
+    # Valor por defecto 80 si no se pasa ?min_confidence= en la ruta 
     min_conf = request.args.get("min_confidence", default=80, type=int)
 
     try:
-        # Process_image es la función que hará toda la magia
+        # process_image es la función que hará toda la magia
         result = process_image(body["data"], min_conf)
 
         return jsonify(result)
